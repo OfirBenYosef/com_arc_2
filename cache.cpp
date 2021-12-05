@@ -106,15 +106,72 @@ tag::tag_update(unsigned tag ,unsigned wr_alloc,bool hit){
     }
 }
 
-void write(unsigned long address){
-    //purssing the address, maybe outside
-    unsigned offset = ;
-    unsigned set = ;
-    unsigned tag = ;
-    //l1 search
-    for(int i=0;i<l1_ways;i++){
-        if(l1->tag_arr[i][l1_set] == tag)
+int write(unsigned long address){
+    bool hit_l1 = false;
+    bool hit_l2 = false;
 
+    tag *l1_tag = null;
+    tag *l2_tag = null;
+
+    //purssing the address
+    unsigned l1_sets = G_cache->l1->num_of_sets;
+    unsigned l2_sets = G_cache->l2->num_of_sets;
+    unsigned offset = address % block_size;
+    unsigned set_l1 = (address >> block_size) % l1_sets;
+    unsigned set_l2 = (address >> block_size) % l2_sets;
+    unsigned tag_l1 = (address >> (block_size+l1_sets);
+    unsigned tag_l2 = (address >> (block_size+l2_sets);
+    //l1 search
+    unsigned l1_ways = G_cache->l1->ways;
+    unsigned l2_ways = G_cache->l2->ways;
+    for(int i=0;i<l1_ways;i++){
+        if(G_cache->l1->tag_arr[i][l1_set]->tag == tag){
+            l1_tag = &G_cache->l1->tag_arr[i][l1_set];
+            hit_l1 = true;
+            break;
+        }
+    }
+    //l2 search
+    for(int i=0;i<l2_ways;i++){
+        if(G_cache->l2->tag_arr[i][l2_set]->tag == tag){
+            l2_tag = &G_cache->l2->tag_arr[i][l2_set];
+            hit_l2 = true;
+            break;
+        }
+    }
+
+
+}
+
+int read(unsigned long address){
+    //purssing the address, maybe outside
+    unsigned l1_sets = G_cache->l1->num_of_sets;
+    unsigned l2_sets = G_cache->l2->num_of_sets;
+    unsigned offset = address % block_size;
+    unsigned set_l1 = (address >> block_size) % l1_sets;
+    unsigned set_l2 = (address >> block_size) % l2_sets;
+    unsigned tag_l1 = (address >> (block_size+l1_sets);
+    unsigned tag_l2 = (address >> (block_size+l2_sets);
+    //l1 search
+    unsigned l1_ways = G_cache->l1->ways;
+    unsigned l2_ways = G_cache->l2->ways;
+    for(int i=0;i<l1_ways;i++){
+        if(l1->tag_arr[i][l1_set] == tag){
+            if(G_cache->l1->wr_alloc){
+                this->valid = true;
+                this->dirty = true;
+            }
+            else{
+                //do..
+                this->valid = true;
+                this->dirty = false;
+            }
+        }
+    }
+    for(int i=0;i<l2_ways;i++){
+        if(l1->tag_arr[i][l2_set] == tag){
+
+        }
     }
     //l2 search
 
